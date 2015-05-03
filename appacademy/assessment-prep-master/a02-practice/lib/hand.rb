@@ -15,9 +15,16 @@ class Hand
 
   def points
     sum = 0
+    aces = 0
     @cards.each do |card|
-      sum += card.value
+      aces += 1 if card.value == :ace
+      sum += card.blackjack_value
     end
+
+    aces.times do
+      sum -= 10 if sum > 21
+    end
+
     sum
   end
 
@@ -26,13 +33,18 @@ class Hand
   end
 
   def hit(deck)
-    deck.take(1)
+    raise "already busted" if busted?
+    cards.concat(deck.take(1))
   end
 
   def beats?(other_hand)
+    return false if busted?
+    other_hand.busted? || points > other_hand.points
   end
 
   def return_cards(deck)
+    deck.return(@cards)
+    @cards = []
   end
 
   def to_s

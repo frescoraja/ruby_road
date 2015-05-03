@@ -1,12 +1,14 @@
 require 'byebug'
+require_relative 'card'
+require_relative 'deck'
 
 class Hand
   include Comparable
 
   attr_reader :cards, :hand_rank, :ranks
 
-  def initialize(cards = [], deck = nil)
-    @cards = cards
+  def initialize(deck)
+    @cards = []
     @deck = deck
     @hand_rank = 0
 
@@ -31,10 +33,9 @@ class Hand
   end
 
   def ranks
+    # debugger
     @cards.map(&:value)
   end
-
-  private
 
   def check_hand
     @hand_rank = 1 if high_card
@@ -46,6 +47,18 @@ class Hand
     @hand_rank = 7 if full_house
     @hand_rank = 8 if quads
     @hand_rank = 9 if straight_flush
+  end
+
+  def rank_in_words
+    return "straight flush" if @hand_rank == 9
+    return "4 of a kind" if @hand_rank == 8
+    return "full house" if @hand_rank == 7
+    return "flush" if @hand_rank == 6
+    return "straight" if @hand_rank == 5
+    return "three of a kind" if @hand_rank == 4
+    return "two-pair" if @hand_rank == 3
+    return "pair" if @hand_rank == 2
+    return "high card" if @hand_rank == 1
   end
 
   def high_card
@@ -115,7 +128,7 @@ class Hand
 
   def pair_compare(other_hand)
     our_pair = ranks.detect { |rank| ranks.count(rank) > 1 }
-    their_pair = other_hand.ranks.detect { |rank| ranks.count(rank) > 1 }
+    their_pair = other_hand.ranks.detect { |rank| other_hand.ranks.count(rank) > 1 }
     our_pair <=> their_pair
   end
 

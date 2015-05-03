@@ -61,8 +61,8 @@ class Card
   end
 
   def blackjack_value
-    raise "ace has special value" if value == :ace
-
+    # raise "ace has special value" if value == :ace
+    return 11 if value == :ace
     BLACKJACK_VALUE[value]
   end
 
