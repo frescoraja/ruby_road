@@ -4,7 +4,7 @@ class Dealer < Player
   attr_reader :bets
 
   def initialize
-    super("Dealer", 0)
+    super("dealer", 0)
 
     @bets = {}
   end
@@ -15,8 +15,9 @@ class Dealer < Player
 
   def play_hand(deck)
     until self.hand.points >= 17
-      puts "Dealer hits!"
       self.hand.hit(deck)
+      puts "Dealer hits!"
+      puts "#{@name}'s cards: #{hand.to_s}"
     end
   end
 
@@ -26,14 +27,7 @@ class Dealer < Player
 
   def pay_bets
     @bets.each do |player, amt|
-      if player.hand.beats?(self.hand)
-        puts "#{player.name}, you won! #{amt * 2}"
-        player.pay_winnings(amt * 2)
-        puts "You now have #{player.bankroll}"
-      else
-        puts "#{player.name}, you lost!"
-        puts "You now have #{player.bankroll}"
-      end
+      player.pay_winnings(amt * 2) if player.hand.beats?(self.hand)
     end
   end
 end

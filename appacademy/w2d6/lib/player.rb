@@ -22,27 +22,4 @@ class Player
     @bankroll -= bet_amt
   end
 
-  def give_bet(dealer)
-    puts "#{@name}, your cards are :"
-    puts "#{hand.to_s}"
-    print "You have $#{@bankroll}. How much do you want to bet? "
-    bet = Integer(gets.chomp)
-    place_bet(dealer, bet)
-  end
-
-  def hit?(deck)
-    answer = true
-    while answer && !hand.busted?
-      print "Do you want to hit? (y/n):"
-      yesno = gets.chomp
-      answer = yesno == 'y' ? true : false
-      break if answer == false
-      hand.hit(deck)
-      print "#{hand.to_s}"
-      if hand.busted?
-        puts "You Busted!"
-      end
-    end
-  end
-
 end
